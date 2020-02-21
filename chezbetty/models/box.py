@@ -1,4 +1,5 @@
 from .model import *
+import re
 
 class Box(Base):
     __tablename__ = 'boxes'
@@ -27,6 +28,15 @@ class Box(Base):
 
     @classmethod
     def from_barcode(cls, barcode):
+        box_list = DBSession.query(cls).filter(cls.barcode.ilike('%{}%'.format(barcode))).all()
+        for box in box_list:
+            #split string into individual barcodes
+            box_barcode_sub = box.barcode.split(';')
+            #check each barcode for an EXACT match
+            for single_box_barcode_sub in box_barcode_sub:
+                if single_box_barcode_sub == barcode:
+                    return box
+        #if we get here it is likely a bad scan, so search for exact match to throw exception if needed
         return DBSession.query(cls).filter(cls.barcode == barcode).one()
 
     @classmethod
@@ -63,10 +73,22 @@ class Box(Base):
         return DBSession.query(func.count(cls.id).label('c'))\
                         .filter(cls.name == name).one().c > 0
 
-    @classmethod
-    def exists_barcode(cls, barcode):
-        return DBSession.query(func.count(cls.id).label('c'))\
-                        .filter(cls.barcode == barcode).one().c > 0
+    @classmethod #search for all delimited barcodes in database; return true if any matches are found
+    def exists_barcode(cls, barcode, id=None):
+        #split string into individual barcodes
+        barcode_list = barcode.split(';')
+        for single_barcode in barcode_list:
+            if single_barcode != "":
+                #retreive the list (if any) of boxes containing this barcode; required due to substring matches
+                box_list = DBSession.query(cls).filter(cls.id != id).filter(cls.barcode.ilike('%{}%'.format(single_barcode))).all()
+                for box in box_list:
+                    #split string into individual barcodes
+                    box_barcode_list = box.barcode.split(';')
+                    #check each barcode for an EXACT match
+                    for single_box_barcode_sub in box_barcode_list:
+                        if single_box_barcode_sub == single_barcode:
+                            return True
+        return False
 
     def __str__(self):
         return '<Box ({})>'.format(self.name)

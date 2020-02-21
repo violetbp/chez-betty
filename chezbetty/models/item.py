@@ -37,7 +37,7 @@ class Item(Versioned, Base):
     def __init__(self, name, barcode, price, wholesale, bottle_dep, sales_tax,
                  in_stock, enabled):
         self.name = name
-        self.barcode = re.compile(r'[^\d;]+').sub('', barcode) #remove any characters that aren't digits or delimiters
+        self.barcode = barcode
         self.price = price
         self.wholesale = wholesale
         self.bottle_dep = bottle_dep
@@ -51,16 +51,16 @@ class Item(Versioned, Base):
 
     @classmethod
     def from_barcode(cls, barcode):
-        return DBSession.query(cls).filter(cls.barcode == barcode).one()
-
-    @classmethod
-    def from_barcode_sub(cls, barcode):
         item_list = DBSession.query(cls).filter(cls.barcode.ilike('%{}%'.format(barcode))).all()
-        if(len(item_list) == 1):
-            return item_list[0]
-        else: #list length other than 1 is likely a bad scan, so search for exact match to throw exception if needed
-            return DBSession.query(cls).filter(cls.barcode == barcode).one()
-        #TODO: handle the two cases where len(item_list) != 1 (len is 0, len is > 1)
+        for item in item_list:
+            #split string into individual barcodes
+            item_barcode_sub = item.barcode.split(';')
+            #check each barcode for an EXACT match
+            for single_item_barcode_sub in item_barcode_sub:
+                if single_item_barcode_sub == barcode:
+                    return item
+        #if we get here it is likely a bad scan, so search for exact match to throw exception if needed
+        return DBSession.query(cls).filter(cls.barcode == barcode).one()
 
 
     @classmethod
@@ -102,21 +102,22 @@ class Item(Versioned, Base):
         return DBSession.query(func.count(cls.id).label('c'))\
                         .filter(cls.name == name).one().c > 0
 
-    @classmethod
-    def exists_barcode(cls, barcode):
-        return DBSession.query(func.count(cls.id).label('c'))\
-                        .filter(cls.barcode == barcode).one().c > 0
-
-    @classmethod #search for all delimited barcodes in database; return true if any matches are found
-    def exists_barcode_sub(cls, barcode):
-        sub = re.compile(r'[^\d;]+').sub('', barcode).split(';') #remove any characters that aren't digits or delimiters
-        result = False
-        for single_barcode in sub:
-            result = DBSession.query(func.count(cls.id).label('c'))\
-                        .filter(cls.barcode.ilike('%{}%'.format(single_barcode))).one().c > 0
-            if(result):
-                return result
-        return result
+    @classmethod #check to see if the barcode(s) exist in *other* items (not the current one being updated)
+    def exists_barcode(cls, barcode, id=None):
+        #split string into individual barcodes
+        barcode_list = barcode.split(';')
+        for single_barcode in barcode_list:
+            if single_barcode != "":
+                #retreive the list (if any) of items containing this barcode; required due to substring matches
+                item_list = DBSession.query(cls).filter(cls.id != id).filter(cls.barcode.ilike('%{}%'.format(single_barcode))).all()
+                for item in item_list:
+                    #split string into individual barcodes
+                    item_barcode_list = item.barcode.split(';')
+                    #check each barcode for an EXACT match
+                    for single_item_barcode_sub in item_barcode_list:
+                        if single_item_barcode_sub == single_barcode:
+                            return True
+        return False
 
     @classmethod
     def total_inventory_wholesale(cls):
