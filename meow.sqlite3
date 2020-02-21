@@ -1,0 +1,24 @@
+
+"@bower_components/StickyTableHeaders": "jmosbech/StickyTableHeaders#*",
+"postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'chezbetty/static/bower_components', 'junction') } catch (e) { }\""
+    sqlite3 chezbetty.sqlite3 "insert into users "
+    
+    
+have: node_modules/jquery/dist/*   
+need: static/js/lib/jquery/*
+
+have: node_modules/bootstrap/dist/js/*
+have: node_modules/bootstrap/dist/css/*
+
+cp -r node_modules/*/dist chezbetty/static/dyn/
+
+
+
+
+id              
+type            
+name            
+balance         
+archived_balance
+created_at      
+sqlite3 chezbetty.sqlite3 'insert into accounts (id, type, name, balance, version) VALUES (8, "user", "user", 100, 1);'

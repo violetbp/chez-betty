@@ -1,5 +1,6 @@
-{% set relative = relative|default('') -%}
+{% import "../macro_alerts.jinja2" as alerts %}
 {% import "macro_buttons.jinja2" as button %}
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -7,57 +8,43 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" type="image/png" href="{{'chezbetty:static/chezbetty_32px.png'|static_url}}" />
   {% block head %}
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
   <link rel="stylesheet" href="{{'chezbetty:static/css/lib/bootstrap/bootstrap.min.css'|static_url}}" />
-  <link rel="stylesheet" href="{{'chezbetty:static/css/lib/bootstrap-sortable/bootstrap-sortable.css'|static_url}}" />
   <link rel="stylesheet" href="{{'chezbetty:static/css/lib/jquery-ui/jquery-ui.min.css'|static_url}}" />
 
-  <link rel="stylesheet" href="{{'chezbetty:static/css/chezbetty.css'|static_url}}" />
   <link rel="stylesheet" href="{{'chezbetty:static/css/chezbetty-common.css'|static_url}}" />
+  <link rel="stylesheet" href="{{'chezbetty:static/css/chezbetty-terminal.css'|static_url}}" />
 
+  <script src="{{'chezbetty:static/js/lib/jquery/jquery.min.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/lib/jquery-ui/jquery-ui.min.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/lib/bootstrap/bootstrap.min.js'|static_url}}"></script>
-  <script src="{{'chezbetty:static/js/lib/bootstrap-sortable/bootstrap-sortable.js'|static_url}}"></script>
 
   <script src="{{'chezbetty:static/js/chezbetty-common.js'|static_url}}"></script>
+  <script src="{{'chezbetty:static/js/chezbetty-terminal.js'|static_url}}"></script>
+  <script src="{{'chezbetty:static/js/chezbetty-terminal-dragscroll.js'|static_url}}"></script>
 
   <title>{% if request.debug %}[ DEBUG ]{% endif %} {% block title %}{% endblock %} | Chez Betty</title>
   {% endblock %}
+
+  <style>
+  @media (min-width: 992px) {
+    .container {
+      width: 1600px;
+    }
+  }
+  </style>
 </head>
 <body>
 
+  {% if "demo" in request.cookies and request.cookies["demo"]|int %}
+    {% set demo = True %}
+  {% else %}
+    {% set demo = False %}
+  {% endif %}
+
   <div id="wrap">
 
-    {% set active_page = active_page|default('index') -%}
-
-    <div id="alerts" class="container">
-      {% block alerts %}
-      {% for msg in request.session.pop_flash('error') %}
-      <div class="alert alert-danger" role="alert">
-        {{ msg }}
-      </div>
-      {% endfor %}
-      {% for msg in request.session.pop_flash('success') %}
-      <div class="alert alert-success" role="alert">
-        {{ msg }}
-      </div>
-      {% endfor %}
-      {% for msg in request.session.pop_flash('info') %}
-      <div class="alert alert-info" role="alert">
-        {{ msg }}
-      </div>
-      {% endfor %}
-      {% endblock %}
-    </div>
-
-    {% block top %}
-    <div class="container">
-      <div class="header">
-        <h1>{% block header %}{% endblock %}</h1>
-      </div>
-    </div>
+    {% block alerts %}
+    {{ alerts.alerts_container(request) }}
     {% endblock %}
 
     <div id="content" class="container">
@@ -67,9 +54,37 @@
     {% block footer %}{% endblock %}
   </div>
 
+  <script src="{{'chezbetty:static/js/chezbetty-terminal.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/chezbetty-common-onload.js'|static_url}}"></script>
+  <script src="{{'chezbetty:static/js/chezbetty-terminal-keyboard.js'|static_url}}"></script>
   {% block onload %}
   {% endblock %}
+
+  {% set timeout = timeout|default(60*1000*2) -%}
+  <script>
+    var wintimeout = setTimeout(terminal_timeout, {{ timeout }});
+
+    // Called on each mouse click (user touching screen)
+    $(document).mousedown(function (e) {
+      // Reset the timeout timer
+      if (wintimeout) {
+        clearTimeout(wintimeout);
+      }
+      // Start a new timeout in case this is the last keypress (1min timeout)
+      wintimeout = setTimeout(terminal_timeout, {{ timeout }});
+    });
+
+    // Called on each keypress (barcode scan)
+    $(document).keypress(function (e) {
+      // Reset the timeout timer
+      if (wintimeout) {
+        clearTimeout(wintimeout);
+      }
+      // Start a new timeout in case this is the last keypress (1min timeout)
+      wintimeout = setTimeout(terminal_timeout, {{ timeout }});
+    });
+  </script>
+
 
   <!-- Google Analytics tracker -->
   <script>

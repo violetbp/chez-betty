@@ -11,20 +11,21 @@ from pyramid.paster import (
 
 from pyramid.scripts.common import parse_vars
 
-import models.account as account
-from models.item import Item
-from models.user import User
-from models.vendor import Vendor
-from models.box import Box
-from models.request import Request
-from models.item_vendor import ItemVendor
-from models.box_vendor import BoxVendor
-from models.box_item import BoxItem
-from models.announcement import Announcement
-from models.model import *
-from models.transaction import *
-from models.btcdeposit import BtcPendingDeposit
-from models.receipt import Receipt
+
+import chezbetty.models.account as account
+from chezbetty.models.item import Item
+from chezbetty.models.user import User
+from chezbetty.models.vendor import Vendor
+from chezbetty.models.box import Box
+from chezbetty.models.request import Request
+from chezbetty.models.item_vendor import ItemVendor
+from chezbetty.models.box_vendor import BoxVendor
+from chezbetty.models.box_item import BoxItem
+from chezbetty.models.announcement import Announcement
+from chezbetty.models.model import *
+from chezbetty.models.transaction import *
+from chezbetty.models.btcdeposit import BtcPendingDeposit
+from chezbetty.models.receipt import Receipt
 
 
 def usage(argv):
@@ -102,6 +103,9 @@ def main(argv=sys.argv):
         DBSession.flush()
         DBSession.add(BoxItem(coke_box, coke, 32, 100))
 
+
+        ## users
+        ## def __init__(self, uniqname, umid, name):
         # Add the betty user
         DBSession.add(coke)
         user = User(
@@ -116,12 +120,12 @@ def main(argv=sys.argv):
         # Add an admin user
         user = User(
                "admin",
-               "56785678",
+               "99999999",
                "Administrator"
                )
         user.role = "administrator"
-        user.password = "chezbettyadmin"
-        DBSession.add(user)
+        user.password = "admin"
+        DBSession.add(user)        
 
         # Init the accounts we need
         account.get_virt_account("chezbetty")
@@ -129,6 +133,16 @@ def main(argv=sys.argv):
         account.get_cash_account("safe")
         account.get_cash_account("chezbetty")
         account.get_cash_account("btcbox")
+
+        # Add a user
+        user = User(
+               "user",
+               "11111111",
+               "User"
+               )
+        user.role = "user"
+        user.password = "user"
+        DBSession.add(user)
 
 if __name__ == "__main__":
     main()

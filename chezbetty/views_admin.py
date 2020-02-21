@@ -346,7 +346,7 @@ def admin_index(request):
     now = arrow.now()
 
     # Walk back to the beginning of the day for all these statistics
-    now = now.replace(hour=0, minute=0, second=0)
+    now = now.shift(hours=0, minutes=0, seconds=0)
 
     today_sales     = Purchase.total(start=now)
     today_profit    = PurchaseLineItem.profit_on_sales(start=now)
@@ -361,7 +361,7 @@ def admin_index(request):
     today_new_users = User.get_number_new_users(start=now)
 
     # Also get statistics for yesterday
-    yesterday = now - datetime.timedelta(days=1)
+    yesterday = now - datetime.timedelta(1)
 
     yesterday_sales     = Purchase.total(start=yesterday, end=now)
     yesterday_profit    = PurchaseLineItem.profit_on_sales(start=yesterday, end=now)
@@ -467,31 +467,31 @@ def admin_dashboard(request):
     now = arrow.now()
 
     # Walk back to the beginning of the day for all these statistics
-    now = now.replace(hour=0, minute=0, seconds=0)
+    now = now.shift(hours=0, minutes=0, seconds=0)
 
-    ytd_sales     = Purchase.total(start=now.replace(month=1,day=1), end=None)
-    ytd_profit    = PurchaseLineItem.profit_on_sales(start=now.replace(month=1,day=1), end=None)
-    ytd_lost      = Inventory.total(start=now.replace(month=1,day=1), end=None)
-    ytd_dep       = Deposit.total(start=now.replace(month=1,day=1), end=None)
-    ytd_dep_cash  = CashDeposit.total(start=now.replace(month=1,day=1), end=None)
-    ytd_dep_btc   = BTCDeposit.total(start=now.replace(month=1,day=1), end=None)
-    ytd_dep_cc    = CCDeposit.total(start=now.replace(month=1,day=1), end=None)
-    ytd_discounts = Purchase.discounts(start=now.replace(month=1,day=1), end=None)
-    ytd_fees      = Purchase.fees(start=now.replace(month=1,day=1), end=None)
-    ytd_users     = Purchase.distinct(distinct_on=Event.user_id, start=now.replace(month=1, day=1))
-    ytd_new_users = User.get_number_new_users(start=now.replace(month=1, day=1))
+    ytd_sales     = Purchase.total(start=now.shift(months=1,days=1), end=None)
+    ytd_profit    = PurchaseLineItem.profit_on_sales(start=now.shift(months=1,days=1), end=None)
+    ytd_lost      = Inventory.total(start=now.shift(months=1,days=1), end=None)
+    ytd_dep       = Deposit.total(start=now.shift(months=1,days=1), end=None)
+    ytd_dep_cash  = CashDeposit.total(start=now.shift(months=1,days=1), end=None)
+    ytd_dep_btc   = BTCDeposit.total(start=now.shift(months=1,days=1), end=None)
+    ytd_dep_cc    = CCDeposit.total(start=now.shift(months=1,days=1), end=None)
+    ytd_discounts = Purchase.discounts(start=now.shift(months=1,days=1), end=None)
+    ytd_fees      = Purchase.fees(start=now.shift(months=1,days=1), end=None)
+    ytd_users     = Purchase.distinct(distinct_on=Event.user_id, start=now.shift(months=1, days=1))
+    ytd_new_users = User.get_number_new_users(start=now.shift(months=1, days=1))
 
-    mtd_sales     = Purchase.total(start=now.replace(day=1), end=None)
-    mtd_profit    = PurchaseLineItem.profit_on_sales(start=now.replace(day=1), end=None)
-    mtd_lost      = Inventory.total(start=now.replace(day=1), end=None)
-    mtd_dep       = Deposit.total(start=now.replace(day=1), end=None)
-    mtd_dep_cash  = CashDeposit.total(start=now.replace(day=1), end=None)
-    mtd_dep_btc   = BTCDeposit.total(start=now.replace(day=1), end=None)
-    mtd_dep_cc    = CCDeposit.total(start=now.replace(day=1), end=None)
-    mtd_discounts = Purchase.discounts(start=now.replace(day=1), end=None)
-    mtd_fees      = Purchase.fees(start=now.replace(day=1), end=None)
-    mtd_users     = Purchase.distinct(distinct_on=Event.user_id, start=now.replace(day=1))
-    mtd_new_users = User.get_number_new_users(start=now.replace(day=1))
+    mtd_sales     = Purchase.total(start=now.shift(days=1), end=None)
+    mtd_profit    = PurchaseLineItem.profit_on_sales(start=now.shift(days=1), end=None)
+    mtd_lost      = Inventory.total(start=now.shift(days=1), end=None)
+    mtd_dep       = Deposit.total(start=now.shift(days=1), end=None)
+    mtd_dep_cash  = CashDeposit.total(start=now.shift(days=1), end=None)
+    mtd_dep_btc   = BTCDeposit.total(start=now.shift(days=1), end=None)
+    mtd_dep_cc    = CCDeposit.total(start=now.shift(days=1), end=None)
+    mtd_discounts = Purchase.discounts(start=now.shift(days=1), end=None)
+    mtd_fees      = Purchase.fees(start=now.shift(days=1), end=None)
+    mtd_users     = Purchase.distinct(distinct_on=Event.user_id, start=now.shift(days=1))
+    mtd_new_users = User.get_number_new_users(start=now.shift(days=1))
 
     graph_deposits_day_total = views_data.create_dict('deposits', 'day', 21)
     graph_deposits_day_cash  = views_data.create_dict('deposits_cash', 'day', 21)
@@ -582,8 +582,8 @@ def admin_dashboard(request):
                 )
 
 def metrics_per_time(start, end):
-    xmas_start = start.replace(month=12, day=23)
-    xmas_end = end.replace(month=1, day=2)
+    xmas_start = start.shift(months=12, days=23)
+    xmas_end = end.shift(months=1, days=2)
 
     metrics = {
         "sales":      Purchase.total(start=start, end=end),
@@ -650,7 +650,7 @@ def metrics_per_time(start, end):
     metrics['deferred_revenue'] = deferred_revenue
     metrics["net"] = net
 
-    metrics['range'] = '{} - {}'.format(start.format('MMM DD, YYYY'), end.replace(days=-1).format('MMM DD, YYYY'))
+    metrics['range'] = '{} - {}'.format(start.format('MMM DD, YYYY'), end.shift(days=-1).format('MMM DD, YYYY'))
 
     return metrics
 
@@ -690,7 +690,7 @@ def admin_index_history_year(request):
         month_index = i + 1
         start = arrow.get(year, month_index, 1)
 
-        metric       = metrics_per_time(start, start.replace(months=+1))
+        metric       = metrics_per_time(start, start.shift(months=+1))
         table_header = month
         table_link   = [('Year-Over-Year', 'month/{}'.format(month_index))]
 
@@ -718,7 +718,7 @@ def admin_index_history_month(request):
     for year in years:
         start = arrow.get(year, month, 1)
 
-        metric       = metrics_per_time(start, start.replace(months=+1, years=+1))
+        metric       = metrics_per_time(start, start.shift(months=+1, years=+1))
         table_header = '{} - {}'.format(months[month-1], year)
         table_link   = None
         metrics.append([table_header, table_link, metric])
@@ -2979,7 +2979,7 @@ def admin_users_email_purchasers(request):
         request.session.flash('Invalid timeframe for recall email', 'error')
         return HTTPFound(location=request.route_url('admin_users_email'))
 
-    start_time = arrow.now().replace(days=-days)
+    start_time = arrow.now().shift(-days)
 
     # Lookup all the affected users
     users = set()

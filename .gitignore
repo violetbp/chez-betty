@@ -21,3 +21,8 @@ bower_components/
 RELEASE-VERSION
 *.mo
 venv
+node_modules/*
+chezbetty.sqlite3
+package-lock.json
+yarn.lock
+yarn-error.log

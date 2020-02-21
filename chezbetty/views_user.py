@@ -66,13 +66,13 @@ def transaction_history_queries(request, user_or_pool):
     if 'history-end' not in request.GET:
         request.GET['history-end'] =\
                 arrow.now()\
-                .replace(hours=+1)\
+                .shift(hours=1)\
                 .floor('hour')\
                 .format(TS_FORMAT)
     if 'history-start' not in request.GET:
         request.GET['history-start'] =\
                 arrow.get(request.GET['history-end'], TS_FORMAT)\
-                .replace(months=-1)\
+                .shift(months=-1)\
                 .format(TS_FORMAT)
 
     start = arrow.get(request.GET['history-start'], TS_FORMAT)
