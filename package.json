@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@bower_components/bootstrap-sortable": "drvic10k/bootstrap-sortable#~1.9.0",
+    "@bower_components/bootstrap-sortable": "drvic10k/bootstrap-sortable#1.9.0",
     "@bower_components/fgt-jquery-scannerdetection": "frontgatetickets/jQuery-Scanner-Detection#*",
     "barcoder": "^2.0.1",
     "popper.js": "^1.16.0",
