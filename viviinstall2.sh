@@ -6,7 +6,7 @@ git clone git@github.com:violetbp/chez-betty.git
 cd chez-betty
 
 
-python3.7 -m env env
+python3.7 -m venv env
 source env/bin/activate
 
 pip install -e .
@@ -30,5 +30,5 @@ sed "s/sqlalchemy.url = sqlite:\/\/\/%(here)s\/chezbetty.sqlite/$path/" developm
 #run initialziation script
 python chezbetty/initializedb.py development.ini
 
-echo "source venv/bin/activate"
+echo "source env/bin/activate"
 echo "pserve development.ini"

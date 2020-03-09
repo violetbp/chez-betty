@@ -14,7 +14,8 @@ var input_timer = null;
 
 
 // This gets called when keyboard input stops.
-function process_input () {
+function process_input() {
+	//console.log("keyboard imput stopped");
 	// Keep a local copy so we can clear global in case anything goes wrong.
 	var keyin = keyboard_input;
 	keyboard_input = '';
@@ -31,11 +32,11 @@ function process_input () {
 		window.location.replace("/terminal/" + umid);
 
 	} else if ((keyin.length == 7 || keyin.length == 14) &&
-		       (keyin.slice(0, 4) == "BILL" || keyin.slice(0, 3) == "ILL")) {
+		(keyin.slice(0, 4) == "BILL" || keyin.slice(0, 3) == "ILL")) {
 		// This looks like the bill acceptor.
 		// We handle either two separate messages (BEG and amount) or them
 		// as one string.
-		var dollars = keyin.slice(keyin.length-3, keyin.length);
+		var dollars = keyin.slice(keyin.length - 3, keyin.length);
 
 		if (dollars == 'BEG') {
 			start_deposit();
@@ -47,7 +48,7 @@ function process_input () {
 	} else {
 		// Well, this must be a barcode scan
 		if (keyin.length > 1) {
-			var barcode = keyin.slice(0, keyin.length-1);
+			var barcode = keyin.slice(0, keyin.length - 1);
 			add_item(barcode);
 		}
 	}

@@ -28,3 +28,6 @@ sed "s/sqlalchemy.url = sqlite:\/\/\/%(here)s\/chezbetty.sqlite/$path/" developm
 #run initialziation script
 python chezbetty/initializedb.py development.ini
 sqlite3 chezbetty.sqlite3 < chezbetty/migrations/migration_1.15.0-1.16.0.sql
+
+
+##must be logged in (as admin??to be able to login with terminal)

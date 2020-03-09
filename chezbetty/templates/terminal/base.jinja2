@@ -25,6 +25,7 @@
 
   <script src="{{'chezbetty:static/js/chezbetty-common.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/chezbetty-terminal.js'|static_url}}"></script>
+
   <script src="{{'chezbetty:static/js/chezbetty-terminal-dragscroll.js'|static_url}}"></script>
 
   <title>{% if request.debug %}[ DEBUG ]{% endif %} {% block title %}{% endblock %} | Chez Betty</title>
@@ -39,7 +40,7 @@
   </style>
 </head>
 <body>
-
+  <div id="request-device">BUTTON</div>
   {% if "demo" in request.cookies and request.cookies["demo"]|int %}
     {% set demo = True %}
   {% else %}
@@ -62,6 +63,8 @@
   <script src="{{'chezbetty:static/js/chezbetty-terminal.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/chezbetty-common-onload.js'|static_url}}"></script>
   <script src="{{'chezbetty:static/js/chezbetty-terminal-keyboard.js'|static_url}}"></script>
+  <script src="{{'chezbetty:static/js/chezbetty-terminal-hid.js'|static_url}}"></script>
+
   {% block onload %}
   {% endblock %}
 
