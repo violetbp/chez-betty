@@ -1,5 +1,5 @@
 mkdir -p chezbetty/static/css/lib/bootstrap/ chezbetty/static/js/lib/bootstrap/ chezbetty/static/js/lib/jquery/
-mkdir -p 
+mkdir -p chezbetty/static/js/lib/jquery-ui/
 
 cp ./node_modules/bootstrap/dist/css/bootstrap.min.css chezbetty/static/css/lib/bootstrap/bootstrap.min.css
 cp ./node_modules/bootstrap/dist/js/bootstrap.min.js chezbetty/static/js/lib/bootstrap/bootstrap.min.js
@@ -11,8 +11,7 @@ pushd temp
 wget https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip
 unzip jquery-ui-1.12.1.zip
 pushd jquery-ui-1.12.1
-mkdir -p chezbetty/static/js/lib/jquery-ui/
-cp  jquery-ui.min.css ../..chezbetty/static/css/lib/jquery-ui/jquery-ui.min.css
-cp  jquery-ui.min.js ../..chezbetty/static/js/lib/jquery-ui/jquery-ui.min.js
+cp  jquery-ui.min.css ../../chezbetty/static/css/lib/jquery-ui/jquery-ui.min.css
+cp  jquery-ui.min.js ../../chezbetty/static/js/lib/jquery-ui/jquery-ui.min.js
 popd
 popd
