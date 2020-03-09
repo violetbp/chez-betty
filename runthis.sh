@@ -1,5 +1,5 @@
 mkdir -p chezbetty/static/css/lib/bootstrap/ chezbetty/static/js/lib/bootstrap/ chezbetty/static/js/lib/jquery/
-mkdir -p chezbetty/static/js/lib/jquery-ui/
+mkdir -p chezbetty/static/js/lib/jquery-ui/ chezbetty/static/css/lib/jquery-ui/
 
 cp ./node_modules/bootstrap/dist/css/bootstrap.min.css chezbetty/static/css/lib/bootstrap/bootstrap.min.css
 cp ./node_modules/bootstrap/dist/js/bootstrap.min.js chezbetty/static/js/lib/bootstrap/bootstrap.min.js
