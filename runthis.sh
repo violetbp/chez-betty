@@ -15,3 +15,9 @@ cp  jquery-ui.min.css ../../chezbetty/static/css/lib/jquery-ui/jquery-ui.min.css
 cp  jquery-ui.min.js ../../chezbetty/static/js/lib/jquery-ui/jquery-ui.min.js
 popd
 popd
+
+
+mkdir -p chezbetty/static/js/lib/bootstrap-sortable/ chezbetty/static/css/lib/bootstrap-sortable/
+#bootstrap sortable time
+cp node_modules/@bower_components/bootstrap-sortable/Contents/bootstrap-sortable.css chezbetty/static/css/lib/bootstrap-sortable/bootstrap-sortable.css
+cp node_modules/@bower_components/bootstrap-sortable/Scripts/bootstrap-sortable.js chezbetty/static/js/lib/bootstrap-sortable/bootstrap-sortable.js
