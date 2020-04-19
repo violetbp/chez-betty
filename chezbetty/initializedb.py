@@ -26,6 +26,7 @@ from chezbetty.models.model import *
 from chezbetty.models.transaction import *
 from chezbetty.models.btcdeposit import BtcPendingDeposit
 from chezbetty.models.receipt import Receipt
+from chezbetty.models.ephemeron import *
 
 
 def usage(argv):

@@ -42,8 +42,7 @@ def notfound(request):
     # If the path looks like "/terminal/users" and we can't find that, then we
     # want to redirect to a known page so the terminal keeps working.
     if '.' in request.path:
-        #return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
-        return "hello"
+        return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
     else:
         request.session.flash('404: Could not find that page. Redirected to home.', 'error')
         return HTTPFound(location=request.route_url('index'))
@@ -121,14 +120,6 @@ def main(global_config, **settings):
     config.add_route('terminal_purchase_tag',    '/terminal/purchase/tag/{tag_id}')
 
     config.add_route('terminal',                 '/terminal/{umid}')
-
-    # TERMINAL API CALLS
-    config.add_route('api_terminal_umid',            '/api/terminal/umid')
-    config.add_route('api_terminal_deposit',         '/api/terminal/deposit')
-    config.add_route('api_terminal_item_barcode',    '/api/terminal/barcode')
-    config.add_route('api_terminal_item_id',         '/api/terminal/id')
-    config.add_route('api_terminal_purchase',        '/api/terminal/purchase')
-    config.add_route('api_terminal_purchase_delete', '/api/terminal/purchase/delete')
 
 
     # USER ADMIN
@@ -214,7 +205,6 @@ def main(global_config, **settings):
 
     config.add_route('admin_users_list',                '/admin/users/list')
     config.add_route('admin_users_archive_old_submit',  '/admin/users/archive/old/submit')
-
     config.add_route('admin_users_stats',               '/admin/users/stats')
     config.add_route('admin_users_email',               '/admin/users/email')
     config.add_route('admin_users_email_endofsemester', '/admin/users/email/endofsemester')
@@ -316,6 +306,5 @@ def main(global_config, **settings):
     config.scan(".views_admin")
     config.scan(".views_data")
     config.scan(".views_dynamic")
-    config.scan(".views_terminal_api")
 
     return config.make_wsgi_app()

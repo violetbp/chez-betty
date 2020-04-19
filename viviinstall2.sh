@@ -14,6 +14,7 @@ sudo apt-get install -y nodejs
 python3.7 -m venv env
 source env/bin/activate
 
+pip install wheel
 pip install -e .
 python setup.py develop
 
