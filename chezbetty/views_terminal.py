@@ -135,7 +135,7 @@ def terminal(request):
                 purchase_pools.append(pu.pool)
 
         # Get the list of tags that have items without barcodes in them
-        tags_with_nobarcode_items = Tag.get_tags_with_nobarcode_items();
+        tags_with_nobarcode_items = Tag.get_tags_with_nobarcode_items()
 
         return {'user': user,
                 'items': items,

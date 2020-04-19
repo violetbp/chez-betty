@@ -42,8 +42,8 @@ def notfound(request):
     # If the path looks like "/terminal/users" and we can't find that, then we
     # want to redirect to a known page so the terminal keeps working.
     if '.' in request.path:
-        #return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
-        return "hello"
+        return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
+        #return "hello"
     else:
         request.session.flash('404: Could not find that page. Redirected to home.', 'error')
         return HTTPFound(location=request.route_url('index'))
@@ -129,7 +129,7 @@ def main(global_config, **settings):
     config.add_route('api_terminal_item_id',         '/api/terminal/id')
     config.add_route('api_terminal_purchase',        '/api/terminal/purchase')
     config.add_route('api_terminal_purchase_delete', '/api/terminal/purchase/delete')
-
+    config.add_route('api_terminal_get_items', '/api/terminal/get/items')
 
     # USER ADMIN
     config.add_route('user_index',                 '/user')

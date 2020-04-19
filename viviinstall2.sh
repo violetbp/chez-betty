@@ -41,5 +41,7 @@ python chezbetty/initializedb.py development.ini
 
 
 
+
+
 echo "source env/bin/activate"
 echo "pserve development.ini"

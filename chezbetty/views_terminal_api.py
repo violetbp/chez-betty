@@ -132,6 +132,40 @@ def options(context, request):
         'Access-Control-Max-Age': '1728000',
     })
     return dict()
+@view_config (route_name='api_terminal_get_items', renderer='json',request_method="OPTIONS")
+def options(context, request):
+    request.response.headers.update({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Max-Age': '1728000',
+    })
+    return dict()
+
+
+
+@view_config(
+    route_name='api_terminal_get_items',
+    request_method='GET',
+    renderer='json',
+)
+def api_terminal_get_items(request):
+
+    # allow cors request
+    request.response.headers.update({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+    })
+    print("----------------")
+    print(Item.get_nobarcode_notag_items())
+    print("----------------")
+    print(Tag.get_tags_with_nobarcode_items())
+    print("----------------")
+
+    return {
+        Tag.get_tags_with_nobarcode_items()
+    }
 
 # route to validate umid
 # params: umid (str), scanned (bool), token (str)
