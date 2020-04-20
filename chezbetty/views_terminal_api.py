@@ -62,6 +62,43 @@ class DepositException(Exception):
     pass
 
 
+
+
+# fetch data used to render /login
+@view_config(
+    route_name='api_terminal_login',
+    renderer='json',
+)
+def api_terminal_login(request):
+    if request.method == 'OPTIONS':
+        request.response.headers.update(options_headers)
+        return {}
+
+    request.response.headers.update({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST',
+    })
+
+    if request.method != 'POST':
+        request.response.status = 400
+        return {'error': 'request-not-post'}
+
+    body = request.json_body
+
+    if body['token'] != token:
+        request.response.status = 401
+        return {}
+    
+    announcements = []
+    for announcement in Announcement.all_enabled():
+        announcements.append(announcement.announcement)
+
+    return {
+        'announcements': announcements,
+        'debt': str(User.get_amount_owed()),
+    }
+
+
 # fetches user data. what this returns should be pushed by the electron app
 # to /terminal route, then used to render that page. check vue-router documentation
 # for how that works
@@ -71,11 +108,12 @@ def terminal_initial(user):
     # to check with admins to know for sure...
 
     deposit = None
-    in_flight_deposit = Ephemeron.from_name('deposit')
-    if in_flight_deposit:
-        amount = Decimal(in_flight_deposit.value)
-        deposit = datalayer.deposit(user, user, amount)
-        DBSession.delete(in_flight_deposit)
+    # TODO ALERT commenting this next bit out to avoid calling ephemeron
+    #in_flight_deposit = Ephemeron.from_name('deposit')
+    #if in_flight_deposit:
+    #    amount = Decimal(in_flight_deposit.value)
+    #    deposit = datalayer.deposit(user, user, amount)
+    #    DBSession.delete(in_flight_deposit)
 
     # determine initial wall-of-shame fee (if applicable)
     purchase_fee_percent = Decimal(0)
@@ -222,7 +260,7 @@ def api_terminal_umid(request):
 
     # umid entered w/ keypad
     else:
-        #try:
+        try:
             # try to fetch user, will throw exception on failure
             user = User.from_umid(req_body['umid'])
             print("keypad")
@@ -232,18 +270,19 @@ def api_terminal_umid(request):
                 raise User.InvalidUserException
 
             # umid checks out, fetch data needed to display terminal
-            #try:
-            request.response.status = 200
-            return terminal_initial(user)
+            try:
+                request.response.status = 200
+                print("returning from umid api call")
+                return terminal_initial(user)
 
-            #except:
-                #request.response.status = 400
-                #return {'errors': {'terminal-fetch-failed': 'Something went wrong fetching initial terminal data.'}}
+            except:
+                request.response.status = 400
+                return {'errors': {'terminal-fetch-failed': 'Something went wrong fetching initial terminal data.'}}
 
-        #except:
+        except:
             # tell terminal there was an error
-            #request.response.status = 400
-            #return {'errors': {'mcard-keypad-error': 'The UMID was invalid or has not been registered prior.'}}
+            request.response.status = 400
+            return {'errors': {'mcard-keypad-error': 'The UMID was invalid or has not been registered prior.'}}
 
 
 # handle deposits into the bill acceptor. a deposit should be triggered by a listener

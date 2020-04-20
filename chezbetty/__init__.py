@@ -42,8 +42,8 @@ def notfound(request):
     # If the path looks like "/terminal/users" and we can't find that, then we
     # want to redirect to a known page so the terminal keeps working.
     if '.' in request.path:
-        return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
-        #return "hello"
+        #return pyramid.httpexceptions.HTTPNotFound(body_template='<a href="/">Home</a>')
+        return "hello"
     else:
         request.session.flash('404: Could not find that page. Redirected to home.', 'error')
         return HTTPFound(location=request.route_url('index'))
