@@ -142,7 +142,16 @@ def options(context, request):
         'Access-Control-Max-Age': '1728000',
     })
     return dict()
-
+@view_config (route_name='api_terminal_item_id', renderer='json',request_method="OPTIONS")
+def options(context, request):
+    request.response.headers.update({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Max-Age': '1728000',
+    })
+    return dict()
 
 
 @view_config(
@@ -442,9 +451,9 @@ def api_terminal_item_id(request):
     req_body = request.json_body
 
     # check token match
-    if req_body['token'] != token:
-        request.response.status = 401
-        return {}
+    #if req_body['token'] != token:
+        #request.response.status = 401
+        #return {}
 
     # allow cors request
     request.response.headers.update({
@@ -462,7 +471,7 @@ def api_terminal_item_id(request):
     if not item.enabled:
         request.response.status = 400
         return {'error': 'That product is not currently for sale.'}
-
+    print('\n' + str(item) + '\n')
     request.response.status = 200
     return {
         'id': item.id,
