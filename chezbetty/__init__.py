@@ -85,7 +85,10 @@ def main(global_config, **settings):
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
-
+    
+    config.include('.cors')
+    config.add_cors_preflight_handler()
+    
     config.include('pyramid_jinja2')
     config.include('pyramid_beaker')
 

@@ -122,36 +122,6 @@ def terminal_initial(user):
     # how to create one, so i can't document what will be returned in 'purchase_pools'.
 
 
-@view_config (route_name='api_terminal_umid', renderer='json',request_method="OPTIONS")
-def options(context, request):
-    request.response.headers.update({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Max-Age': '1728000',
-    })
-    return dict()
-@view_config (route_name='api_terminal_get_items', renderer='json',request_method="OPTIONS")
-def options(context, request):
-    request.response.headers.update({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Max-Age': '1728000',
-    })
-    return dict()
-@view_config (route_name='api_terminal_item_id', renderer='json',request_method="OPTIONS")
-def options(context, request):
-    request.response.headers.update({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Max-Age': '1728000',
-    })
-    return dict()
 
 
 @view_config(
@@ -188,22 +158,22 @@ def api_terminal_get_items(request):
     renderer='json',
 )
 def api_terminal_umid(request):
+    print("api_terminal_umid start")
+
     req_body = request.json_body
 
-    print("1")
 
     # check token match
     if req_body['token'] != token:
         request.response.status = 401
         return {}
-    print("2")
+    print("token accepted")
 
     # allow cors request
-    request.response.headers.update({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-    })
-    print("3")
+    #request.response.headers.update({
+    #    'Access-Control-Allow-Origin': '*',
+    #    'Access-Control-Allow-Methods': 'POST',
+    #})
 
     # mcard scanned
     if req_body['scanned']:
@@ -215,10 +185,11 @@ def api_terminal_umid(request):
             # get user, create if needed
             with transaction.manager:
                 user = User.from_umid(req_body['umid'], create_if_never_seen=True)
-
+                print(user)
             # add user to database / fetch user data
             user = DBSession.merge(user)
-
+            print("------")
+            print(user)
             # return special error if user is disabled
             if not user.enabled:
                 request.response.status = 400
@@ -254,7 +225,8 @@ def api_terminal_umid(request):
         #try:
             # try to fetch user, will throw exception on failure
             user = User.from_umid(req_body['umid'])
-
+            print("keypad")
+            print(user)
             # check user is valid
             if user.role == 'serviceaccount':
                 raise User.InvalidUserException

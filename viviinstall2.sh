@@ -1,9 +1,9 @@
-sudo apt install apache2 build-essential certbot debhelper emacs enchant fail2ban fonts-ubuntu-console git htop ldap-utils libapache2-mod-wsgi-py3 libjpeg-dev ntp python3-all-dbg python3-all-dev python3-doc python3-pip python3-venv python-all-dbg python-all-dev python-certbot-apache python-doc python-egenix-mx-base-dev python-ldap python-sphinx quilt sasl2-bin sendmail systemd-sysv tcsh units zsh zsh-doc npm postgresql postgresql-server-dev-10 libjpeg-dev -y
+sudo apt install apache2 build-essential certbot debhelper enchant git ldap-utils libapache2-mod-wsgi-py3 libjpeg-dev ntp  python-certbot-apache python-doc python-egenix-mx-base-dev python-ldap python-sphinx quilt sasl2-bin sendmail systemd-sysv tcsh units  npm  libjpeg-dev -y
 sudo apt install python3.7-dev python3.7-venv sqlite3 -y
+#python3-all-dbg python3-all-dev python3-doc python3-pip python3-venv postgresql postgresql-server-dev-10 python-all-dbg python-all-dev zsh zsh-doc
+#git clone git@github.com:violetbp/chez-betty.git
 
-git clone git@github.com:violetbp/chez-betty.git
-
-cd chez-betty
+#cd chez-betty
 
 #install node
 curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
