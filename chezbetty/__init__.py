@@ -133,6 +133,8 @@ def main(global_config, **settings):
     config.add_route('api_terminal_purchase',        '/api/terminal/purchase')
     config.add_route('api_terminal_purchase_delete', '/api/terminal/purchase/delete')
     config.add_route('api_terminal_get_items', '/api/terminal/get/items')
+    config.add_route('api_terminal_login', '/api/terminal/login')
+
 
     # USER ADMIN
     config.add_route('user_index',                 '/user')

@@ -60,8 +60,8 @@ def main(argv=sys.argv):
            True
         ))
         DBSession.add(Item(
-           "Clif Bar: Chocolate Chip",
-           "722252100900",
+           "meowmeowmeow",
+           "4204",
            1.25,
            1.17,
            False,
@@ -72,6 +72,16 @@ def main(argv=sys.argv):
         DBSession.add(Item(
            "Clif Bar: Crunchy Peanut Butter",
            "722252101204",
+           1.25,
+           1.14,
+           False,
+           False,
+           11,
+           True
+        ))
+        DBSession.add(Item(
+           "test item",
+           "4203",
            1.25,
            1.14,
            False,
@@ -90,6 +100,36 @@ def main(argv=sys.argv):
             True
         )
         DBSession.add(coke)
+
+        # self.name = name
+        # self.barcode = barcode
+        # self.price = price
+        # self.wholesale = wholesale
+        # self.bottle_dep = bottle_dep
+        # self.sales_tax = sales_tax
+        # self.in_stock = in_stock
+        # self.enabled = enabled
+
+        DBSession.add(Item(
+           "Clif Bar other type",
+           "4201",
+           100,
+           200,
+           False,
+           False,
+           103,
+           True
+        ))
+        DBSession.add(Item(
+           "Water thats been near a lime",
+           "4202",
+           100,
+           200,
+           True,
+           False,
+           103,
+           True
+        ))
 
         # Add a test box
         coke_box = Box(

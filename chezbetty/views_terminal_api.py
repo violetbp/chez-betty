@@ -137,6 +137,29 @@ def terminal_initial(user):
     # pull list of recently purchased items
     user_recent_items = user.get_recent_items(limit=5)
 
+    print("--------------------==-------------1")
+    temp = []
+    for i in Item.all():
+        print(i)
+        item = {
+            'name'            : i.name,
+            'barcode'         : i.barcode,
+            'price'           : str(i.price),
+            'wholesale'       : str(i.wholesale),
+            'bottle_dep'      : i.bottle_dep,
+            'sales_tax'       : i.sales_tax,
+            'in_stock'        : i.in_stock,
+            'enabled'         : i.enabled,
+        }
+        print(item)
+        temp.append(item)
+        print(temp)
+
+
+            
+    
+    print("--------------------==-------------2")
+
     # return terminal data
     return {
         'user_name': user.name,
@@ -152,7 +175,8 @@ def terminal_initial(user):
         'admin_discount': str(round((datalayer.admin_discount) * 100)),
         'tags_with_nobarcode_items': tags_with_nobarcode_items,
         'nobarcode_notag_items': Item.get_nobarcode_notag_items(),
-        'deposit': deposit
+        'deposit': deposit,
+        'all_items': temp
     }
 
     # note: testing a few of these routes is very hard because i'm not sure what they reference / return
