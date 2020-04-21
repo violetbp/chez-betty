@@ -142,9 +142,10 @@ def terminal_initial(user):
     for i in Item.all():
         print(i)
         item = {
+            "id" : i.id,
             'name'            : i.name,
             'barcode'         : i.barcode,
-            'price'           : str(i.price),
+            'cost'            : str(i.price),
             'wholesale'       : str(i.wholesale),
             'bottle_dep'      : i.bottle_dep,
             'sales_tax'       : i.sales_tax,
